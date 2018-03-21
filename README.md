@@ -8,4 +8,4 @@ PHP app for sending emails
   	"from": "john@doe.com",
   	"subject": "Greetings",
   	"message": "Hello there!"
-  }```
+ } ```
