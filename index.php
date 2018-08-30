@@ -16,21 +16,23 @@ $headers =
     "Reply-To: " . $from . "\r\n" .
     "X-Mailer: PHP/" . phpversion();
 
+function message($content) {
+  return json_encode(array("message" => $content));
+}
+
+if ($_ENV["ENV"] === "TEST") {
+    echo message("This is a test environment");
+    exit();
+}
 
 if(!$to || !$subject || !$message || !$from) {
-    echo '{';
-    echo '"message": "check if you are sending \'to\', \'subject\', \'message\' and \'from\' fields"';
-    echo '}';
+    echo message("check if you are sending 'to', 'subject', 'message' and 'from' fields");
     exit();
 }
 
 if(@mail($to, $subject, $message, $headers)) {
-    echo '{';
-    echo '"message": "success"';
-    echo '}';
+    echo message("success");
 } else {
-    echo '{';
-    echo '"message": "error"';
-    echo '}';
+    echo message("error");
 }
 ?>
