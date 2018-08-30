@@ -17,7 +17,14 @@ $headers =
     "X-Mailer: PHP/" . phpversion();
 
 function message($content) {
-  return json_encode(array("message" => $content));
+    $out = json_encode(array("message" => $content));
+    file_put_contents('php://stdout', date_format(new DateTime(), DATE_ISO8601) . " | " . print_r($out, TRUE) . PHP_EOL);
+    return $out;
+}
+
+if (!$to || !$subject || !$message || !$from) {
+    echo message("check if you are sending 'to', 'subject', 'message' and 'from' fields");
+    exit();
 }
 
 if ($_ENV["ENV"] === "TEST") {
@@ -25,14 +32,8 @@ if ($_ENV["ENV"] === "TEST") {
     exit();
 }
 
-if(!$to || !$subject || !$message || !$from) {
-    echo message("check if you are sending 'to', 'subject', 'message' and 'from' fields");
-    exit();
-}
-
-if(@mail($to, $subject, $message, $headers)) {
+if (@mail($to, $subject, $message, $headers)) {
     echo message("success");
 } else {
     echo message("error");
 }
-?>
